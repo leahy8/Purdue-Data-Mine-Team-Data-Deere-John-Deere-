@@ -6,7 +6,7 @@ library(ggmap)
 Michigan_StationData <- read.csv('/home/leahy8/Downloads/Mich_stations.csv')
 head(Michigan_StationData)
 #Use Google API
-register_google(key = "AIzaSyAGZ9Ehcd8fy9PO_q7JXeDGMuLxTkB9o2E", write = TRUE)
+register_google(key = 'API', write = TRUE)
 Michigan_center = as.numeric(geocode("Michigan"))
 #Create station points
 mypoints <- data.frame(lon=Michigan_StationData$longitude,lat=Michigan_StationData$latitude)
