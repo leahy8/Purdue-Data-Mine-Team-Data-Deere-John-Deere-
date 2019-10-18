@@ -8,7 +8,7 @@ MiCY <- subset(CropYield, CropYield$State == 'MICHIGAN')
 MiCY2002 <- subset(MiCY, MiCY$Year == '2002')
 head(MiCY2002)
 #Now lets load in our API to create the map of Michigan.
-register_google(key = "AIzaSyAGZ9Ehcd8fy9PO_q7JXeDGMuLxTkB9o2E", write = TRUE)
+register_google(key = "API", write = TRUE)
 Michigan_center = as.numeric(geocode("Michigan"))
 #We can use the cordinates of latitude and longitude for our map points.
 mypoints <- data.frame(lon=MiCY2002$Longitude,lat=MiCY2002$Latitude)
