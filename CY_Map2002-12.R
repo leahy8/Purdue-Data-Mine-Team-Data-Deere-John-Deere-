@@ -10,7 +10,7 @@ library(mapproj)
 #Now, we will cut this down to just 2002.
 CY_2002 <- subset(CropYield, CropYield$Year == '2002')
 #Now, we need to get our API key, so we can use google maps.
-register_google(key = "AIzaSyAGZ9Ehcd8fy9PO_q7JXeDGMuLxTkB9o2E", write = TRUE)
+register_google(key = "API", write = TRUE)
 #To get all four states in one map, we need to pick a center point.
 NorthMW_center = as.numeric(geocode("Stevens Point, Wisconsin"))
 CY_2002_Mapbase <- ggmap(get_googlemap(center = NorthMW_center, zoom = 6, alpha = 0.5))
