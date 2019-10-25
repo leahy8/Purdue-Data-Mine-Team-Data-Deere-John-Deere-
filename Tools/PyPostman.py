@@ -5,7 +5,7 @@ import tempfile
 ############################
 ######### Settings #########
 ############################
-token = "RLvkdNZCbaPBqGykxdrqJPgHHMjdBkDx"
+token = "Enter Token Here"
 outputFileName = "MichiganPrecipitation" #Do not include .json, it will be added automatically
 
 endpoint = "data"
