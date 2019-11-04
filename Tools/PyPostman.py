@@ -17,8 +17,8 @@ import tempfile
 ############################
 ADD_LOCATION = True # Adds latitude and longitude data, significantly slows the script
 
-token = "RLvkdNZCbaPBqGykxdrqJPgHHMjdBkDx"
-outputFileName = "MichiganPrecipitation" #Do not include .json, it will be added automatically
+token = "Enter Token Here"
+outputFileName = "ExampleFileName" #Do not include .json, it will be added automatically
 
 endpoint = "data"
 requestParameters = {
