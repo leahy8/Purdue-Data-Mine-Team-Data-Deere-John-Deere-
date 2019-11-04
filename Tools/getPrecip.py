@@ -1,3 +1,9 @@
+# getPrecip
+# Retrieves precipitation data from NOAA's web api and stores it as JSON files 
+# Repeats requests for multiple states 
+#
+# @author - Ben Schwartz
+# @date - 10/14/19
 import requests #https://realpython.com/python-requests/
 import json
 
@@ -26,7 +32,7 @@ for state in states:
     stop = state[4]
 
     for i in range(start, stop):  
-        with open(f"MI_PRCP/{stateCode}_PRCP_{i}.json", "w") as writeFile:
+        with open(f"{stateCode}_PRCP/{stateCode}_PRCP_{i}.json", "w") as writeFile:
             response = requests.get(
                 "https://www.ncdc.noaa.gov/cdo-web/api/v2/data",
                 params={

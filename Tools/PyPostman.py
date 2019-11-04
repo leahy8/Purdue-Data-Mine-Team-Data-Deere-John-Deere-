@@ -1,3 +1,13 @@
+# PyPostman
+# Retrieves precipitation data from NOAA's web api and stores it as a JSON files  
+# Has the following advantages as opposed to using the API
+# - Unlimited Date Range
+# - Unlimited Data Size
+# - Has option to add location
+#
+# @author - Ben Schwartz
+# @date - 11/3/19
+
 import requests #https://realpython.com/python-requests/
 import json
 import tempfile
@@ -5,7 +15,9 @@ import tempfile
 ############################
 ######### Settings #########
 ############################
-token = "Enter Token Here"
+ADD_LOCATION = True # Adds latitude and longitude data, significantly slows the script
+
+token = "RLvkdNZCbaPBqGykxdrqJPgHHMjdBkDx"
 outputFileName = "MichiganPrecipitation" #Do not include .json, it will be added automatically
 
 endpoint = "data"
@@ -73,6 +85,16 @@ def combineJSONFiles(globalConstant, directoryName):
         files.append(f"{i}.json")
 
     entryNum = 1
+    ghcndStations = None
+    if ADD_LOCATION:
+        print("\nCombining Data and Adding Locations...")
+        ghcndStations = requests.get("https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt").text.splitlines()
+        #Opening Locally (Backup)
+        #with open("ghcnd-stations.txt", 'r') as ghcndStationsFile:
+        #    ghcndStations = ghcndStationsFile.readlines()
+    else:
+        print("\nCombining Data")
+
     with open(outputFileName+".json", 'w') as writeFile:
         writeFile.write("{")
         for file1 in files:
@@ -81,6 +103,21 @@ def combineJSONFiles(globalConstant, directoryName):
             
                 for dp in di['results']:
                     d = str(dp).replace("'", '"') #Replace with double quotes
+
+                    #https://www.ncei.noaa.gov/data/global-historical-climatology-network-daily/doc/GHCND_documentation.pdf
+                    #https://www1.ncdc.noaa.gov/pub/data/ghcn/daily/ghcnd-stations.txt
+                    if ADD_LOCATION:
+                        locID = dp['station'][dp['station'].find(":")+1:]  
+                        lat = ""; long = ""; elev = ""
+                        for line in ghcndStations:
+                            if locID in line:
+                                spl = line.split()
+                                lat = spl[1]
+                                long = spl[2]
+                                elev = spl[3]      
+                                   
+                        d = d.replace('}', f',"latitude": {lat},"longitude": {long},"elevation": {elev}}}')
+
                     res = f'"{entryNum}":{d},'  #Format entry number as key
 
                     if files[len(files) - 1] == file1 and di['results'][len(di['results']) - 1] == dp:
@@ -89,7 +126,6 @@ def combineJSONFiles(globalConstant, directoryName):
                     writeFile.write(res)
                     entryNum += 1
         writeFile.write("}")
-
 
 
 ############################
