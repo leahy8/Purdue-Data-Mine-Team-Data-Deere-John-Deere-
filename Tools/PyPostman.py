@@ -12,21 +12,26 @@ import requests #https://realpython.com/python-requests/
 import json
 import tempfile
 
+# Michigan = FIPS:26 
+# Minnesota = FIPS:27 
+# Iowa = FIPS:19 
+# Wisconsin = FIPS:55 
+
 ############################
 ######### Settings #########
 ############################
 ADD_LOCATION = True # Adds latitude and longitude data, significantly slows the script
 
-token = "Enter Token Here"
-outputFileName = "ExampleFileName" #Do not include .json, it will be added automatically
+token = "RLvkdNZCbaPBqGykxdrqJPgHHMjdBkDx"
+outputFileName = "Wisconsin_GSOM_AWND" #Do not include .json, it will be added automatically
 
 endpoint = "data"
 requestParameters = {
-    "locationid":   "FIPS:26",
+    "locationid":   "FIPS:55",
     "datasetid":    "GSOM",
     "startdate":    "2002-01-01",
     "enddate":      "2012-12-31",
-    "datatypeid":   "PRCP",
+    "datatypeid":   "AWND",
     "units":        "metric",
 }
 
@@ -51,29 +56,33 @@ def genJSONFiles(requestParams, globalConstant, directoryName):
         print('An error has occurred in retrieving metadata.')
     else:
         json_response = response.json()
-        numResponses = json_response['metadata']['resultset']['count']
-        print("Number of Responses: ", numResponses)
+        if 'metadata' in json_response:
+            numResponses = json_response['metadata']['resultset']['count']
+            print("Number of Responses: ", numResponses)
+            maxRange = json_response['metadata']['resultset']['count'] // 1000 + 1
+        else:
+            print("No data found")
 
-        maxRange = json_response['metadata']['resultset']['count'] // 1000 + 1
+        
 
     #print(maxRange)
+    if ('metadata' in json_response) and response:
+        for i in range(0, maxRange):
+            with open(f"{directoryName}/{i + globalConstant}.json", "w") as writeFile:
+                requestParams['offset'] = f"{i}001",
 
-    for i in range(0, maxRange):
-        with open(f"{directoryName}/{i + globalConstant}.json", "w") as writeFile:
-            requestParams['offset'] = f"{i}001",
+                response = requests.get(
+                    f"https://www.ncdc.noaa.gov/cdo-web/api/v2/{endpoint}",
+                    params=requestParams,
+                    headers={'token': token},
+                )
 
-            response = requests.get(
-                f"https://www.ncdc.noaa.gov/cdo-web/api/v2/{endpoint}",
-                params=requestParams,
-                headers={'token': token},
-            )
-
-            if response:
-                json.dump(response.json(), writeFile)
-                print(f'Success! Written temp file for responses {i}001-{i+1}000')
-                #print(f'Success! Written file for {i + globalConstant}.json')
-            else:
-                print('An error has occurred.')
+                if response:
+                    json.dump(response.json(), writeFile)
+                    print(f'Success! Written temp file for responses {i}001-{i+1}000')
+                    #print(f'Success! Written file for {i + globalConstant}.json')
+                else:
+                    print('An error has occurred.')
 
     return globalConstant + maxRange
 
