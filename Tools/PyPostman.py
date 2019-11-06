@@ -6,7 +6,7 @@
 # - Has option to add location
 #
 # @author - Ben Schwartz
-# @date - 11/3/19
+# @date - 11/5/19
 
 import requests #https://realpython.com/python-requests/
 import json
@@ -23,7 +23,7 @@ import tempfile
 ADD_LOCATION = True # Adds latitude and longitude data, significantly slows the script
 
 token = "Enter Token Here"
-outputFileName = "State_GSOM_AWND" #Do not include .json, it will be added automatically
+outputFileName = "State_Dataset_Var" #Do not include .json, it will be added automatically
 
 endpoint = "data"
 requestParameters = {
