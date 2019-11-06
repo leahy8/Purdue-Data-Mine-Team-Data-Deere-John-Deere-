@@ -22,8 +22,8 @@ import tempfile
 ############################
 ADD_LOCATION = True # Adds latitude and longitude data, significantly slows the script
 
-token = "RLvkdNZCbaPBqGykxdrqJPgHHMjdBkDx"
-outputFileName = "Wisconsin_GSOM_AWND" #Do not include .json, it will be added automatically
+token = "Enter Token Here"
+outputFileName = "State_GSOM_AWND" #Do not include .json, it will be added automatically
 
 endpoint = "data"
 requestParameters = {
