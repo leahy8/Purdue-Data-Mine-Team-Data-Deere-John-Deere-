@@ -5,7 +5,7 @@ library(ggplot2)
 library(RColorBrewer) #colors
 
 #Read JSON File
-json_file <- fromJSON("~/JohnDeere/John-Deere-Project/Data/Minnesota_GSOM_PRCP.json")
+json_file <- fromJSON("~/JohnDeere/John-Deere-Project/Data/Wisconsin_GSOM_PRCP.json")
 
 #Convert to dataframe
 df <- ldply (json_file, data.frame)
@@ -34,7 +34,7 @@ ggplot(data=displayDF, aes(x=displayDF$year, y=displayDF$yearAvg, group=1))+#,co
   geom_line()+
   geom_point()+
   ylim(40, 100)+
-  labs(x="Year since Jan 2002", y="Rainfall (mm)")+
-  ggtitle("Average Yearly Rainfall in Minnesota") #+ 
+  labs(x="Year", y="Rainfall (mm)")+
+  ggtitle("Average Yearly Rainfall in Wisconsin") #+ 
 #scale_color_manual(breaks = c(2002, 2003, 2004),
 #values=c("red", "blue", "green"))
