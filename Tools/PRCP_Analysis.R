@@ -5,7 +5,7 @@ library(ggplot2)
 library(RColorBrewer) #colors
 
 #Read JSON File
-json_file <- fromJSON("~/JohnDeere/John-Deere-Project/Tools/WI_PRCP.json")
+json_file <- fromJSON("~/JohnDeere/John-Deere-Project/Data/Wisconsin_GSOM_PRCP.json")
 
 #Convert to dataframe
 df <- ldply (json_file, data.frame)

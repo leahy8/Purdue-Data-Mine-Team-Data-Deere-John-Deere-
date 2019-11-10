@@ -30,11 +30,11 @@ displayDF$yearAvg <- tapply(df2$value, df2$year,mean)
 
 
 # Basic line plot with points
-ggplot(data=displayDF, aes(x=displayDF$year, y=displayDF$yearAvg/1000, group=1))+#,color = myDF$Year)) +
+ggplot(data=displayDF, aes(x=displayDF$year, y=displayDF$yearAvg, group=1))+#,color = myDF$Year)) +
   geom_line()+
   geom_point()+
-  labs(x="Year since Jan 2002", y="Rainfall (m)")+
-  ggtitle("Average Yearly Rainfall in Michigan") #+ 
+  labs(x="Year since Jan 2002", y="Rainfall (mm)")+
+  ggtitle("Average Yearly Rainfall in Wisconsin") #+ 
 #scale_color_manual(breaks = c(2002, 2003, 2004),
 #values=c("red", "blue", "green"))
 
