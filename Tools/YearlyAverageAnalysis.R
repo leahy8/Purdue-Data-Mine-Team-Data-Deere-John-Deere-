@@ -5,7 +5,7 @@ library(ggplot2)
 library(RColorBrewer) #colors
 
 #Read JSON File
-json_file <- fromJSON("~/JohnDeere/John-Deere-Project/Data/Wisconsin_GSOM_PRCP.json")
+json_file <- fromJSON("~/JohnDeere/John-Deere-Project/Data/Minnesota_GSOM_PRCP.json")
 
 #Convert to dataframe
 df <- ldply (json_file, data.frame)
@@ -33,47 +33,8 @@ displayDF$yearAvg <- tapply(df2$value, df2$year,mean)
 ggplot(data=displayDF, aes(x=displayDF$year, y=displayDF$yearAvg, group=1))+#,color = myDF$Year)) +
   geom_line()+
   geom_point()+
+  ylim(40, 100)+
   labs(x="Year since Jan 2002", y="Rainfall (mm)")+
-  ggtitle("Average Yearly Rainfall in Wisconsin") #+ 
+  ggtitle("Average Yearly Rainfall in Minnesota") #+ 
 #scale_color_manual(breaks = c(2002, 2003, 2004),
 #values=c("red", "blue", "green"))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#Build dataframe to display
-myDF <- data.frame("Months" = 1:length(monthlySums), "Rain" = monthlySums)
-myDF$Year <- floor((1:length(monthlySums) -1) / 12) + 2002
-
-#Check results
-myDF$Months
-myDF$Year
-
-
-
-
-
-
-
-
-length(myDF$Color)
-# Basic line plot with points
-ggplot(data=myDF, aes(x=myDF$Months, y=myDF$Rain/1000, group=1))+#,color = myDF$Year)) +
-  #geom_line()+
-  geom_point()+
-  labs(x="Months since Jan 2002", y="Rainfall (m)")+
-  ggtitle("Monthy Rainfall in Wisconsin") #+ 
-  #scale_color_manual(breaks = c(2002, 2003, 2004),
-  #                    values=c("red", "blue", "green"))
