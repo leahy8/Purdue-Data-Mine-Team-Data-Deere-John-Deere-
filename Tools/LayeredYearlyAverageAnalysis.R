@@ -56,26 +56,30 @@ displayDF_2$state <- "Minnesota"
 displayDF_3$state <- "Michigan"
 displayDF_4$state <- "Iowa"
 
+
 #No default; data explicitly specified for each geom
 #http://www.cookbook-r.com/Graphs/Bar_and_line_graphs_(ggplot2)/
 ggplot(NULL, aes(x=year, y=yearAvg, group=state)) + 
-    geom_point(data = displayDF_1, colour = "red") + 
-    geom_line(data = displayDF_1, colour = "red", aes(year, yearAvg)) +
+    geom_point(data = displayDF_1, aes(color = "Wisconsin")) + 
+    geom_line(data = displayDF_1, aes(year, yearAvg, color = "Wisconsin")) +
     
-    geom_point(data = displayDF_2, colour = "blue") + 
-    geom_line(data = displayDF_2, colour = "blue", aes(year, yearAvg)) + 
+    geom_point(data = displayDF_2, aes(colour = "Minnesota")) + 
+    geom_line(data = displayDF_2, aes(year, yearAvg, colour = "Minnesota")) + 
   
-    geom_point(data = displayDF_3, colour = "green") + 
-    geom_line(data = displayDF_3, colour = "green", aes(year, yearAvg)) + 
+    geom_point(data = displayDF_3, aes(colour = "Michigan")) + 
+    geom_line(data = displayDF_3, aes(year, yearAvg, colour = "Michigan")) + 
 
-    geom_point(data = displayDF_4, colour = "yellow") + 
-    geom_line(data = displayDF_4, colour = "yellow", aes(year, yearAvg)) +
+    geom_point(data = displayDF_4, aes(colour = "Iowa")) + 
+    geom_line(data = displayDF_4, aes(year, yearAvg, colour = "Iowa")) +
   
     ggtitle("Average Yearly Rainfall")+
-    labs(x="Year", y="Rainfall (mm)")+
+    labs(x="Year", y="Rainfall (mm)", color="Legend")
+    
+    #theme(legend.position="right")
     
 
-
+  
+  
 
 
 # Basic line plot with points
