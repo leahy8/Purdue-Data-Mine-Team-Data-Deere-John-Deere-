@@ -5,10 +5,10 @@ library(ggplot2)
 library(RColorBrewer) #colors
 
 #Read JSON File
-json_file <- fromJSON("~/JohnDeere/John-Deere-Project/Data/Wisconsin_GSOM_PRCP.json")
-json_file2 <- fromJSON("~/JohnDeere/John-Deere-Project/Data/Minnesota_GSOM_PRCP.json")
-json_file3 <- fromJSON("~/JohnDeere/John-Deere-Project/Data/Michigan_GSOM_PRCP.json")
-json_file4 <- fromJSON("~/JohnDeere/John-Deere-Project/Data/Iowa_GSOM_PRCP.json")
+json_file <- fromJSON("~/JohnDeere/John-Deere-Project/Data/Wisconsin_GSOM_TAVG.json")
+json_file2 <- fromJSON("~/JohnDeere/John-Deere-Project/Data/Minnesota_GSOM_TAVG.json")
+json_file3 <- fromJSON("~/JohnDeere/John-Deere-Project/Data/Michigan_GSOM_TAVG.json")
+json_file4 <- fromJSON("~/JohnDeere/John-Deere-Project/Data/Iowa_GSOM_TAVG.json")
 
 #Convert to dataframe
 dfa_1 <- ldply (json_file, data.frame)
@@ -72,8 +72,8 @@ ggplot(NULL, aes(x=year, y=yearAvg, group=state)) +
     geom_point(data = displayDF_4, aes(colour = "Iowa")) + 
     geom_line(data = displayDF_4, aes(year, yearAvg, colour = "Iowa")) +
   
-    ggtitle("Average Yearly Rainfall")+
-    labs(x="Year", y="Rainfall (mm)", color="Legend")
+    ggtitle("Yearly Average Temperature")+
+    labs(x="Year", y="Temperature (°C)", color="Legend")
     
     #theme(legend.position="right")
     
