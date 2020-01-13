@@ -8,7 +8,7 @@
 # @author - Ben Schwartz
 # @date - 11/5/19
 
-import requests #https://realpython.com/python-requests/
+import requests
 import json
 import tempfile
 
@@ -22,9 +22,10 @@ import tempfile
 ############################
 ADD_LOCATION = True # Adds latitude and longitude data, significantly slows the script
 
-token = "Enter Token Here"
+token = "Enter Token Here" #Enter NOAA API token as a string
 outputFileName = "State_Dataset_Var" #Do not include .json, it will be added automatically
 
+#API Documentation - https://www.ncdc.noaa.gov/cdo-web/webservices/v2
 endpoint = "data"
 requestParameters = {
     "locationid":   "FIPS:55",
