@@ -16,11 +16,11 @@ outputFile = 'WI_PRCP/WI_PRCP.json'
 
 result = []
 entryNum = 1
-with open(outputFile, 'w') as writeFile:
+with open(outputFile, 'w') as writeFile: #Create result file
     writeFile.write("{")
-    for file1 in files:
+    for file1 in files: #Loop through each file that is being combined
         with open(file1, "r") as read: 
-            di = json.load(read)
+            di = json.load(read) #Read contents
         
             for dp in di['results']:
                 d = str(dp).replace("'", '"') #Replace with double quotes
@@ -29,6 +29,6 @@ with open(outputFile, 'w') as writeFile:
                 if files[len(files) - 1] == file1 and di['results'][len(di['results']) - 1] == dp:
                     res = res[:-1] #Remove final comma
 
-                writeFile.write(res)
+                writeFile.write(res) #Write adjusted file to output file
                 entryNum += 1
     writeFile.write("}")
