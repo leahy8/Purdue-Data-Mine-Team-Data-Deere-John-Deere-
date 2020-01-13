@@ -1,3 +1,7 @@
+#Crop Yield Manipulation
+#This code was an early demo of the crop yield data and exploring how to manipulate the data.  We used commands in R to find out how we 
+#can divide the data for future use.  The commands used here were learned in our STAT 190 Data Mine seminar course.
+
 #To begin, we read in the crop yield data.
 CropYieldData <- read.csv('/home/leahy8/Downloads/Crop_Yield_County_NorthernMW_2002-12.csv')
 #From here, we can use the tapply function to sort the data.
