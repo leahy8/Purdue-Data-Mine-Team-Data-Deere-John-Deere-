@@ -1,13 +1,16 @@
 # getPrecip
+# A testing ground for using Python to automatically pull data from NOAA's database
+#
 # Retrieves precipitation data from NOAA's web api and stores it as JSON files 
 # Repeats requests for multiple states 
 #
+#
 # @author - Ben Schwartz
 # @date - 10/14/19
-import requests #https://realpython.com/python-requests/
+import requests
 import json
 
-token = "RLvkdNZCbaPBqGykxdrqJPgHHMjdBkDx"
+token = "Enter Token Here"
 
 #Michigan  - FIPS:26
 #Minnesota - FIPS:27
@@ -24,16 +27,16 @@ states = [
 #with open("MI_PRCP/test.json", "w"):
 #    pass
 
-for state in states:
+for state in states: #Loops through each state
     print(state[0])
-    stateCode = state[1]
+    stateCode = state[1] #Parse state data
     fip = state[2]
     start = state[3]
     stop = state[4]
 
     for i in range(start, stop):  
-        with open(f"{stateCode}_PRCP/{stateCode}_PRCP_{i}.json", "w") as writeFile:
-            response = requests.get(
+        with open(f"{stateCode}_PRCP/{stateCode}_PRCP_{i}.json", "w") as writeFile: #Open a new file to write results into
+            response = requests.get( #Pull data from NOAA database
                 "https://www.ncdc.noaa.gov/cdo-web/api/v2/data",
                 params={
                     "locationid":   fip,#"FIPS:26",
@@ -49,7 +52,7 @@ for state in states:
             )
 
             if response:
-                json.dump(response.json(), writeFile)
+                json.dump(response.json(), writeFile) #If there is a successful response, write the contents to a file
                 print(f'Success! Written file for {stateCode}_PRCP_{i}.json')
             else:
                 print('An error has occurred.')
