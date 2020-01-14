@@ -8,7 +8,7 @@ library(ggmap)
 #Next, we download the Iowa station location data.  The file location will change based on the user.
 Iowa_StationData <- read.csv('/home/lee3349/Downloads/IOWA.csv')
 head(Iowa_StationData)
-#Use Google API.  The API will change based on the user.
+#Use Google API.  The API will change based on the user.  A centerpoint for the map was also created using a geocode.
 register_google(key = 'API', write = TRUE)
 Iowa_center = as.numeric(geocode("Iowa"))
 #Then, we create a vector of station points to put on our map by taking the latitude and longitude points from the dataset.
