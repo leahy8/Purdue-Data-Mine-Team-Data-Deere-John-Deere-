@@ -1,13 +1,16 @@
-#first we load in the csv file
+#USDA Data Demo
+#This code was an early version of the crop yield mapping which is only for the state of Michigan.
+
+#First we load in the csv file.  The file location will vary based on the user.
 CropYield <-read.csv('/home/leahy8/Downloads/Crop_Yield_County_NorthernMW_2002-12_modified.csv')
 #We also need to call in the ggmap packages.
 library(ggmap)
-#Now, we will cut this down to just Michigan.
+#Now, we will cut this data set down to just Michigan crop yields.
 MiCY <- subset(CropYield, CropYield$State == 'MICHIGAN')
-#We can make this even smaller by selecting a year.  For this, lets select 2002.
+#We can make this even smaller by selecting one year.  For this, lets select 2002.
 MiCY2002 <- subset(MiCY, MiCY$Year == '2002')
 head(MiCY2002)
-#Now lets load in our API to create the map of Michigan.
+#Now lets load in our API to create the map of Michigan, and pick a center point for our map.  The API key will very based on the user.
 register_google(key = "API", write = TRUE)
 Michigan_center = as.numeric(geocode("Michigan"))
 #We can use the cordinates of latitude and longitude for our map points.
