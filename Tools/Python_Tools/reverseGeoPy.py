@@ -1,8 +1,9 @@
 import reverse_geocoder as rg #https://github.com/thampiman/reverse-geocoder
 import re #For string searching https://stackoverflow.com/questions/3368969/find-string-between-two-substrings
 
-with open("Data/Iowa_GSOM_PRCP.json", "r") as readFile:
-    with open("_res.json", "w") as writeFile:
+with open("use.json", "r") as readFile: #open("Data/Iowa_GSOM_PRCP.json", "r") as readFile:
+    with open("_res2.json", "w") as writeFile:
+        writeFile.write("{")
         entries = readFile.readline().split('{') #JSON file is single line, need to split entries with '{'
         #Example line for entry 1
         #"date": "2002-01-01T00:00:00", "datatype": "PRCP", "station": "GHCND:USC00113455", "attributes": ",,,0", "value": 30.3,"latitude": 40.8822,"longitude": -9
@@ -22,7 +23,8 @@ with open("Data/Iowa_GSOM_PRCP.json", "r") as readFile:
                 state = list(results[0].items())[3][1]
 
                 insertIndex = entry.find("}") #Add in results
-                entry = entry[0:insertIndex] + f',"county": "{county}","state": "{state}"' + entry[insertIndex:]
+                entry = "{" + entry[0:insertIndex] + f',"county": "{county}","state": "{state}"' + entry[insertIndex:]
 
 
             writeFile.write(entry)
+        writeFile.write("}")
