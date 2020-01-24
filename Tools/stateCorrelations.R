@@ -33,7 +33,7 @@ while (i < 132) {
   k = k + 1
 }
 
-ggplot(iowa, aes(x=prcp, y=cropyield)) + geom_point()
+ggplot(iowa, aes(x=prcp, y=cropyield)) + geom_point() + ggtitle('Iowa Crop Yield vs. PRCP')
 cor(iowa$prcp, iowa$cropyield) # 0.3926
 
 
