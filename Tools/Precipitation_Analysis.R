@@ -1,5 +1,4 @@
-require(RJSONIO)
-#required to read rson files
+require(RJSONIO)#required to read rson files
 library(plyr) #mropa's answer   https://stackoverflow.com/questions/4227223/convert-a-list-to-a-data-frame
 library(ggplot2)
 library(RColorBrewer) #colors
