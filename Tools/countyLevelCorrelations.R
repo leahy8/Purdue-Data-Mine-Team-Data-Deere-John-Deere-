@@ -50,7 +50,12 @@ param$County = substr(param$County,1,nchar(param$County) - 7)
 #Add to main dataset (tapply for when COUNTY AND YEAR ARE SAME)
 myDF2 <- merge(myDF, param, by=c("County", "Year"), all.x=TRUE)
 #myDF2 <- subset(myDF2, select=c("County", "Yield", "Year", "Precipitation")) # NOT NEEDED ANYMORE #Keep only important columns
+corVal <- cor(na.omit(myDF2)$Parameter, na.omit(myDF2)$Yield) #Get correlation
+newTitle <- paste(plotTitle, '   R=', round(corVal, digits=3))
 
 #Plot Data
-ggplot(myDF2, aes(x=Parameter, y=Yield)) + geom_point() + ggtitle(plotTitle) + xlab(xlabel) + ylab(ylabel)
-cor(na.omit(myDF2)$Parameter, na.omit(myDF2)$Yield)
+ggplot(myDF2, aes(x=Parameter, y=Yield)) + geom_point() + ggtitle(newTitle) + xlab(xlabel) + ylab(ylabel)
+
+  #legend(x='bottomright', legend='test') #paste('Cor =',corVal))
+
+
