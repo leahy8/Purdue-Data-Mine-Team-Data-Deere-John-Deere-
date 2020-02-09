@@ -7,7 +7,7 @@ parameterFile = "~/JohnDeere/John-Deere-Project/Data/Michigan_GSOM_PRCP.json"
 plotTitle = 'Michigan Crop Yield vs. PRCP'
 xlabel = "Average GSOM per County Precipitation (mm)"
 ylabel = "Yield (bushels per acre"
-minMonth = 4 #March (inclusive)
+minMonth = 4 #April (inclusive)
 maxMonth = 10 #October (inclusive)
 
 
