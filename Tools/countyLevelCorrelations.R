@@ -28,18 +28,26 @@ prcp$month <- unlist(prcp$month, use.names=FALSE) #convert to vector
 
 #Average PRCP readings for each station in a county
 prcp <- subset(prcp, month > 3 & month < 11) #Keep only the entries for which month is between April and October
-aggregate(value ~ year+county, data = prcp, mean) #Tapply values for which the year and county is the same #https://stackoverflow.com/questions/5216015/tapply-function-dependent-on-multiple-columns-in-r
+prcp <- prcp[!(prcp$county == ""),] #Remove empty counties
+prcp <- aggregate(prcp$value,by=list(prcp$year,prcp$county), FUN=mean) #Tapply values for which the year and county is the same #https://stackoverflow.com/questions/5216015/tapply-function-dependent-on-multiple-columns-in-r
+#Mean of Average Monthly precipitation for county year combo
+#Failed Below
 #myDF$Precipitation <- tapply(prcp$value, prcp$county, mean) #Only does by county, need to account for year as well
-prcp$county <- sapply(prcp$county, toupper) #Rewrite county column to match that in myDF
-prcp$county = substr(prcp$county,1,nchar(prcp$county) - 7)
-names(prcp)[names(prcp) == 'county'] <- 'County' #Rename to prep for merge, https://stackoverflow.com/questions/7531868/how-to-rename-a-single-column-in-a-data-frame
-names(prcp)[names(prcp) == 'year'] <- 'Year'
-names(prcp)[names(prcp) == 'value'] <- 'Precipitation'
+#res <- aggregate(value ~ year+county, data = prcp, mean) #Incorrect usage?
+
+names(prcp) <- c('Year', 'County', 'Precipitation') #Rename columns
+prcp$County <- sapply(prcp$County, toupper) #Rewrite county column to match that in myDF
+prcp$County = substr(prcp$County,1,nchar(prcp$County) - 7)
 
 #Add to main dataset (tapply for when COUNTY AND YEAR ARE SAME)
 myDF2 <- merge(myDF, prcp, by=c("County", "Year"), all.x=TRUE)
-myDF2 <- subset(myDF2, select=c("County", "Yield", "Year", "Precipitation")) #Keep only important columns
+#myDF2 <- subset(myDF2, select=c("County", "Yield", "Year", "Precipitation")) # NOT NEEDED ANYMORE #Keep only important columns
+
+head(myDF2, n=10)
+myDF2
+
+length(myDF2$Year)
 
 #Plot Data
 ggplot(myDF2, aes(x=Precipitation, y=Yield)) + geom_point() + ggtitle('Michigan Crop Yield vs. PRCP')
-cor(iowa$prcp, iowa$cropyield) # 0.3926
+cor(na.omit(myDF2)$Precipitation, na.omit(myDF2)$Yield) # 0.3926
