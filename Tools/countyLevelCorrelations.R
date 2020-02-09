@@ -2,21 +2,16 @@ require(RJSONIO)# Read JSON file
 library(plyr) # mropa's answer   https://stackoverflow.com/questions/4227223/convert-a-list-to-a-data-frame
 library(ggplot2)
 
-state = "Michigan" #First letter must be uppercase
-parameterFile = "~/JohnDeere/John-Deere-Project/Data/Michigan_GSOM_PRCP.json"
-plotTitle = 'Michigan Crop Yield vs. PRCP'
-xlabel = "Average GSOM per County Precipitation (mm)"
-ylabel = "Yield (bushels per acre"
+state = "Wisconsin" #First letter must be uppercase
+parameterFile = "~/Github/John-Deere-Project/Data/Wisconsin_GSOM_EVAP.json"
+plotTitle = 'Wisconsin Yield vs. EVAP'
+xlabel = "Monthly Evaporation (mm)"
+ylabel = "Yield (bushels per acre)"
 minMonth = 4 #April (inclusive)
 maxMonth = 10 #October (inclusive)
 
-
-
-#April through October
-
-
 #Read Yield CSV file
-region_yield <- read.csv("~/JohnDeere/John-Deere-Project/Data/Crop_Yield_County_NorthernMW_2002-12_modified.csv")
+region_yield <- read.csv("~/Github/John-Deere-Project/Data/Crop_Yield_County_NorthernMW_2002-12_modified.csv")
 state_yield <- subset(region_yield, State == toupper(state))
 
 #Get PRCP file and read into dataframe
@@ -39,9 +34,6 @@ param <- subset(param, month >= minMonth & month <= maxMonth) #Keep only the ent
 param <- param[!(param$county == ""),] #Remove empty counties
 param <- aggregate(param$value,by=list(param$year,param$county), FUN=mean) #Tapply values for which the year and county is the same #https://stackoverflow.com/questions/5216015/tapply-function-dependent-on-multiple-columns-in-r
 #Mean of Average Monthly precipitation for county year combo
-#Failed Below
-#myDF$Precipitation <- tapply(prcp$value, prcp$county, mean) #Only does by county, need to account for year as well
-#res <- aggregate(value ~ year+county, data = prcp, mean) #Incorrect usage?
 
 names(param) <- c('Year', 'County', 'Parameter') #Rename columns
 param$County <- sapply(param$County, toupper) #Rewrite county column to match that in myDF
@@ -49,13 +41,12 @@ param$County = substr(param$County,1,nchar(param$County) - 7)
 
 #Add to main dataset (tapply for when COUNTY AND YEAR ARE SAME)
 myDF2 <- merge(myDF, param, by=c("County", "Year"), all.x=TRUE)
-#myDF2 <- subset(myDF2, select=c("County", "Yield", "Year", "Precipitation")) # NOT NEEDED ANYMORE #Keep only important columns
 corVal <- cor(na.omit(myDF2)$Parameter, na.omit(myDF2)$Yield) #Get correlation
 newTitle <- paste(plotTitle, '   R=', round(corVal, digits=3))
 
 #Plot Data
 ggplot(myDF2, aes(x=Parameter, y=Yield)) + geom_point() + ggtitle(newTitle) + xlab(xlabel) + ylab(ylabel)
 
-  #legend(x='bottomright', legend='test') #paste('Cor =',corVal))
+ 
 
 
