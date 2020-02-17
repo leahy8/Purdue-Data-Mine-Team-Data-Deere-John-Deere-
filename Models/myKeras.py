@@ -141,9 +141,9 @@ model.add(keras.layers.Dense(units=32, activation='relu'))
 model.add(keras.layers.Dense(units=1,  activation='linear'))
 
 #Training
-model.compile(optimizer='rms_promp', #adam
-              loss='mean_absolute_error',
-              )#metrics=['accuracy'])
+model.compile(optimizer='RMSprop', #RMSprop
+              loss='mean_squared_error', #mean_absolute_error
+              metrics=['mean_absolute_percentage_error'])
 
 model.fit(x_train, y_train, epochs=3)
 
