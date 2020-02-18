@@ -12,7 +12,7 @@ import json
 import csv
 
 state = "Iowa"
-datasets = ['PRCP']#['AWND', 'EVAP', 'PRCP', 'TAVG', 'TMAX', 'TMIN']
+datasets = ['PRCP', 'TAVG', 'TMAX', 'TMIN'] #['AWND', 'EVAP', 'PRCP', 'TAVG', 'TMAX', 'TMIN']
 trainYearsMin, trainYearsMax = 2002, 2010
 testYearsMin, testYearsMax = 2011, 2012
 
@@ -92,7 +92,6 @@ def cleanDicts(di, di2):
     di = {x:di[x] for x in di if x in di2} 
     di2 = {x:di2[x] for x in di2 if x in di}
 
-
     return di, di2
 
 def convertComplexDictToArray(mydict): #Used for nested dictionaries
@@ -125,6 +124,7 @@ x_test = convertComplexDictToArray(x_test_dict_clean)
 y_train = convertSimpleDictToArray(y_train_dict_clean)
 y_test = convertSimpleDictToArray(y_test_dict_clean)
 
+np.savetxt('test.csv', x_train, delimiter=',', fmt='%.1f')
 #print(x_train)
 #print(x_test)
 #print(y_train)
@@ -136,8 +136,8 @@ x_test = keras.utils.normalize(x_test, axis=1)
 
 #Define Model
 model = keras.models.Sequential()
-model.add(keras.layers.Dense(units=32, activation='relu', input_dim=12*len(datasets)))
-model.add(keras.layers.Dense(units=32, activation='relu'))
+model.add(keras.layers.Dense(units=64, activation='relu', input_dim=12*len(datasets)))
+model.add(keras.layers.Dense(units=64, activation='relu'))
 model.add(keras.layers.Dense(units=1,  activation='linear'))
 
 #Training
@@ -145,7 +145,7 @@ model.compile(optimizer='RMSprop', #RMSprop
               loss='mean_squared_error', #mean_absolute_error
               metrics=['mean_absolute_percentage_error'])
 
-model.fit(x_train, y_train, epochs=3)
+model.fit(x_train, y_train, epochs=10)
 
 #Verify
 val_loss, val_acc = model.evaluate(x_test, y_test)
