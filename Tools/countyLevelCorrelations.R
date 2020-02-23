@@ -3,7 +3,7 @@ library(plyr) # mropa's answer   https://stackoverflow.com/questions/4227223/con
 library(ggplot2)
 
 state = "Wisconsin" #First letter must be uppercase
-parameterFile = "~/Github/John-Deere-Project/Data/Wisconsin_GSOM_EVAP.json"
+parameterFile = "~/JohnDeere/John-Deere-Project/Data/Wisconsin_GSOM_EVAP.json"
 plotTitle = 'Wisconsin Yield vs. EVAP'
 xlabel = "Monthly Evaporation (mm)"
 ylabel = "Yield (bushels per acre)"
@@ -11,7 +11,7 @@ minMonth = 4 #April (inclusive)
 maxMonth = 10 #October (inclusive)
 
 #Read Yield CSV file
-region_yield <- read.csv("~/Github/John-Deere-Project/Data/Crop_Yield_County_NorthernMW_2002-12_modified.csv")
+region_yield <- read.csv("~/JohnDeere/John-Deere-Project/Data/Crop_Yield_County_NorthernMW_2002-12_modified.csv")
 state_yield <- subset(region_yield, State == toupper(state))
 
 #Get PRCP file and read into dataframe
