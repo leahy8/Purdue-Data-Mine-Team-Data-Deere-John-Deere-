@@ -146,7 +146,7 @@ model.add(keras.layers.Dense(units=1,  activation='linear'))
 #Training
 model.compile(optimizer='RMSprop', #RMSprop
               loss='mean_squared_error', #mean_absolute_error
-              metrics=['mean_absolute_error']) #https://stackoverflow.com/questions/45632549/why-is-the-accuracy-for-my-keras-model-always-0-when-training
+              metrics=['mean_absolute_percentage_error']) #https://stackoverflow.com/questions/45632549/why-is-the-accuracy-for-my-keras-model-always-0-when-training
 
 model.fit(x_train, y_train, epochs=10)
 
@@ -155,7 +155,11 @@ val_loss, val_acc = model.evaluate(x_test, y_test)
 print(val_loss)
 print(val_acc)
 
+#Save
+#model.save('Percent.model')
+
+
 #Predictions
-predict_yields = model.predict(x_test)
-np.savetxt('Predict.csv', predict_yields, delimiter=',', fmt='%.1f')
-np.savetxt('Y_test.csv', y_test, delimiter=',', fmt='%.1f')
+#predict_yields = model.predict(x_test)
+#np.savetxt('Predict.csv', predict_yields, delimiter=',', fmt='%.1f')
+#np.savetxt('Y_test.csv', y_test, delimiter=',', fmt='%.1f')
