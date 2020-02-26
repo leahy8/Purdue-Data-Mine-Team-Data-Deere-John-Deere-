@@ -16,6 +16,7 @@ import tempfile
 # Minnesota = FIPS:27 
 # Iowa = FIPS:19 
 # Wisconsin = FIPS:55 
+# Illinois = FIPS:17
 
 ############################
 ######### Settings #########
