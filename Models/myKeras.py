@@ -152,8 +152,13 @@ model.fit(x_train, y_train, epochs=10)
 
 #Verify
 val_loss, val_acc = model.evaluate(x_test, y_test)
-print(val_loss)
-print(val_acc)
+
+#Output results
+print("\n\t\t--Results--")
+print(f"Loss:\t\t\t\t\t{val_loss:.3f}")
+print(f"Mean Absolute Percentage Error:\t\t{val_acc:.2f}%")
+print(f"Number of data points for training:\t{x_train.shape[0]}")
+print(f"Number of data points for testing:\t{x_test.shape[0]}")
 
 #Save
 #model.save('Percent.model')
