@@ -16,6 +16,7 @@ datasets = ['PRCP', 'TAVG', 'TMAX', 'TMIN'] #['AWND', 'EVAP', 'PRCP', 'TAVG', 'T
 trainYearsMin, trainYearsMax = 2002, 2010
 testYearsMin, testYearsMax = 2011, 2012
 
+addInSoilMoistureData = True
 
 trainYears = list(range(trainYearsMin,trainYearsMax + 1))
 testYears = list(range(testYearsMin,testYearsMax + 1))
@@ -26,31 +27,42 @@ def createDefaultEntry():
     for name in datasets: #Each dataset
         for month in range(1,13): #For each month
             temp[f'{name}.{month}'] = 0 #Default values to 0 in case never filled out
+
+    if addInSoilMoistureData:
+         for month in range(1,13):
+            temp[f'MOIT.{month}'] = 0
+
     return temp
+
+def readInFile(fileName, datasetName, x_train_dict, x_test_dict):
+    with open(fileName, 'r') as f: #Read in as dictionary
+        mydict = json.load(f)   
+        for entry in mydict.values(): #Convert to list and split based on year
+            entryYear = int(entry['date'][0:4])
+            entryMonth = int(entry['date'][5:7])
+            entryCounty = str.upper(entry['county'][:-7]) #Format for later to match county
+            entryState = str.upper(entry['state'])
+            keyName = f"{entryState}.{entryCounty}.{entryYear}" #Format for unique keys based on county and year
+
+            if entryYear >= trainYearsMin and entryYear <= trainYearsMax:
+                if not keyName in x_train_dict:
+                    x_train_dict[keyName] = createDefaultEntry()
+
+                x_train_dict[keyName][f'{datasetName}.{entryMonth}'] = entry['value']
+            elif entryYear >= testYearsMin and entryYear <= testYearsMax:
+                if not keyName in x_test_dict:
+                    x_test_dict[keyName] = createDefaultEntry()
+
+                x_test_dict[keyName][f'{datasetName}.{entryMonth}'] = entry['value']
+    return x_train_dict, x_test_dict
 
 def loadDatasets():    
     x_train_dict, x_test_dict = {}, {}
     for state in states:
         for datasetName in datasets:
-            with open(f'../Data/{state}_GSOM_{datasetName}.json', 'r') as f: #Read in as dictionary
-                mydict = json.load(f)   
-                for entry in mydict.values(): #Convert to list and split based on year
-                    entryYear = int(entry['date'][0:4])
-                    entryMonth = int(entry['date'][5:7])
-                    entryCounty = str.upper(entry['county'][:-7]) #Format for later to match county
-                    entryState = str.upper(state)
-                    keyName = f"{entryState}.{entryCounty}.{entryYear}" #Format for unique keys based on county and year
+            x_train_dict, x_test_dict = readInFile(f'../Data/{state}_GSOM_{datasetName}.json', datasetName, x_train_dict, x_test_dict)
 
-                    if entryYear >= trainYearsMin and entryYear <= trainYearsMax:
-                        if not keyName in x_train_dict:
-                            x_train_dict[keyName] = createDefaultEntry()
-
-                        x_train_dict[keyName][f'{datasetName}.{entryMonth}'] = entry['value']
-                    elif entryYear >= testYearsMin and entryYear <= testYearsMax:
-                        if not keyName in x_test_dict:
-                            x_test_dict[keyName] = createDefaultEntry()
-
-                        x_test_dict[keyName][f'{datasetName}.{entryMonth}'] = entry['value']
+    x_train_dict, x_test_dict = readInFile('../Data/Region_MOIT_updated.json', 'MOIT', x_train_dict, x_test_dict) #Read in soil moisture
 
     return x_train_dict, x_test_dict
 
@@ -129,8 +141,8 @@ y_train = convertSimpleDictToArray(y_train_dict_clean)
 y_test = convertSimpleDictToArray(y_test_dict_clean)
 
 #See training data
-#np.savetxt('test.csv', x_train, delimiter=',', fmt='%.1f')
-#np.savetxt('ML_Output.csv', y_train, delimiter=',', fmt='%.1f')
+np.savetxt('inputs.csv', x_train, delimiter=',', fmt='%.1f')
+np.savetxt('outputs.csv', y_train, delimiter=',', fmt='%.1f')
 
 #print(x_train)
 #print(x_test)
@@ -143,7 +155,7 @@ x_test = keras.utils.normalize(x_test, axis=1)
 
 #Define Model
 model = keras.models.Sequential()
-model.add(keras.layers.Dense(units=64, activation='relu', input_dim=12*len(datasets)))
+model.add(keras.layers.Dense(units=64, activation='relu', input_dim=12*(len(datasets) + addInSoilMoistureData) ))
 model.add(keras.layers.Dense(units=64, activation='relu'))
 model.add(keras.layers.Dense(units=1,  activation='linear'))
 
@@ -165,7 +177,7 @@ print(f"Number of data points for training:\t{x_train.shape[0]}")
 print(f"Number of data points for testing:\t{x_test.shape[0]}")
 
 #Save
-#model.save('Percent.model')
+model.save('currentModel.model')
 
 
 #Predictions
