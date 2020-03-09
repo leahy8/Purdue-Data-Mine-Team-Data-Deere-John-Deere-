@@ -11,7 +11,7 @@ import numpy as np
 import json
 import csv
 
-state = "Iowa"
+states = ["Iowa", "Michigan", "Minnesota", "Wisconsin"]
 datasets = ['PRCP', 'TAVG', 'TMAX', 'TMIN'] #['AWND', 'EVAP', 'PRCP', 'TAVG', 'TMAX', 'TMIN']
 trainYearsMin, trainYearsMax = 2002, 2010
 testYearsMin, testYearsMax = 2011, 2012
@@ -30,25 +30,27 @@ def createDefaultEntry():
 
 def loadDatasets():    
     x_train_dict, x_test_dict = {}, {}
-    for datasetName in datasets:
-        with open(f'../Data/{state}_GSOM_{datasetName}.json', 'r') as f: #Read in as dictionary
-            mydict = json.load(f)   
-            for entry in mydict.values(): #Convert to list and split based on year
-                entryYear = int(entry['date'][0:4])
-                entryMonth = int(entry['date'][5:7])
-                entryCounty = str.upper(entry['county'][:-7]) #Format for later to match county
-                keyName = f"{entryCounty}.{entryYear}" #Format for unique keys based on county and year
+    for state in states:
+        for datasetName in datasets:
+            with open(f'../Data/{state}_GSOM_{datasetName}.json', 'r') as f: #Read in as dictionary
+                mydict = json.load(f)   
+                for entry in mydict.values(): #Convert to list and split based on year
+                    entryYear = int(entry['date'][0:4])
+                    entryMonth = int(entry['date'][5:7])
+                    entryCounty = str.upper(entry['county'][:-7]) #Format for later to match county
+                    entryState = str.upper(state)
+                    keyName = f"{entryState}.{entryCounty}.{entryYear}" #Format for unique keys based on county and year
 
-                if entryYear >= trainYearsMin and entryYear <= trainYearsMax:
-                    if not keyName in x_train_dict:
-                        x_train_dict[keyName] = createDefaultEntry()
+                    if entryYear >= trainYearsMin and entryYear <= trainYearsMax:
+                        if not keyName in x_train_dict:
+                            x_train_dict[keyName] = createDefaultEntry()
 
-                    x_train_dict[keyName][f'{datasetName}.{entryMonth}'] = entry['value']
-                elif entryYear >= testYearsMin and entryYear <= testYearsMax:
-                    if not keyName in x_test_dict:
-                        x_test_dict[keyName] = createDefaultEntry()
+                        x_train_dict[keyName][f'{datasetName}.{entryMonth}'] = entry['value']
+                    elif entryYear >= testYearsMin and entryYear <= testYearsMax:
+                        if not keyName in x_test_dict:
+                            x_test_dict[keyName] = createDefaultEntry()
 
-                    x_test_dict[keyName][f'{datasetName}.{entryMonth}'] = entry['value']
+                        x_test_dict[keyName][f'{datasetName}.{entryMonth}'] = entry['value']
 
     return x_train_dict, x_test_dict
 
@@ -58,7 +60,9 @@ def loadYield():
     for line in reader:
         entryYear = int(line['Year'])
         entryCounty = line['County']
-        keyName = f"{entryCounty}.{entryYear}" #Format for unique keys based on county and year
+        entryState = line['State']
+        keyName = f"{entryState}.{entryCounty}.{entryYear}" #Format for unique keys based on county and year
+
         if entryYear >= trainYearsMin and entryYear <= trainYearsMax:
             if not keyName in y_train_dict:
                 y_train_dict[keyName] = 0
