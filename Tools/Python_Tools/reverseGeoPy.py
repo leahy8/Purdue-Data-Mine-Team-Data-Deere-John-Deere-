@@ -6,8 +6,8 @@ datasets = ["PRCP"]#, "TAVG", "TMAX", "TMIN"]                  #"EVAP" "AWND"
 
 for state in states:
     for dataset in datasets:
-        readFileName = f"Data/{state}_GSOM_{dataset}.json"  #"Region_MOIT.json"
-        writeFileName = f"Data/_{state}_GSOM_{dataset}.json" #"Region_MOIT_updated.json"
+        readFileName = "Region_MOIT.json" # f"Data/{state}_GSOM_{dataset}.json"
+        writeFileName = "Region_MOIT_updated.json" # f"Data/_{state}_GSOM_{dataset}.json"
         print(readFileName)
 
         with open(readFileName, "r") as readFile: #open("Data/Iowa_GSOM_PRCP.json", "r") as readFile:

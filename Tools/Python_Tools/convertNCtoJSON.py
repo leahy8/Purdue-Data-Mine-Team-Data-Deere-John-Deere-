@@ -33,7 +33,7 @@ lat_max = 50
 lon_min = 360 - 97 #degrees west inputted on right (convert to degree east)
 lon_max = 360 - 82
 
-rootgrp = Dataset("../../Data/soilw.mon.mean.v2.nc", "r", format="NETCDF4_CLASSIC")
+rootgrp = Dataset("soilw.mon.mean.v2.nc", "r", format="NETCDF4_CLASSIC")
 
 ##### Info about the file #####
 print("Format: ", rootgrp.data_model)
@@ -110,7 +110,7 @@ with open(outputFile, 'w') as writeFile: #Create result file
                 val = rootgrp.variables['soilw'][time_index][lat_index][lon_index]
                 date = convertToDateFormat(time)
 
-                res = f'"{entryNum}":{{"date": "{date}","datatype": "{datatype}","value": {val},"latitude": {lat},"longitude": {lon},"elevation": 0}},'
+                res = f'"{entryNum}":{{"date": "{date}","datatype": "{datatype}","value": {val},"latitude": {lat},"longitude": {lon-360},"elevation": 0}},'
                 
                 if (entryNum == maxValues):
                     res = res[:-1] #Remove final comma
