@@ -16,7 +16,7 @@ datasets = ['PRCP', 'TAVG', 'TMAX', 'TMIN'] #['AWND', 'EVAP', 'PRCP', 'TAVG', 'T
 trainYearsMin, trainYearsMax = 2002, 2010
 testYearsMin, testYearsMax = 2011, 2012
 
-addInSoilMoistureData = True
+addInSoilMoistureData = False
 
 trainYears = list(range(trainYearsMin,trainYearsMax + 1))
 testYears = list(range(testYearsMin,testYearsMax + 1))
@@ -62,7 +62,8 @@ def loadDatasets():
         for datasetName in datasets:
             x_train_dict, x_test_dict = readInFile(f'../Data/{state}_GSOM_{datasetName}.json', datasetName, x_train_dict, x_test_dict)
 
-    x_train_dict, x_test_dict = readInFile('../Data/Region_MOIT_updated.json', 'MOIT', x_train_dict, x_test_dict) #Read in soil moisture
+    if addInSoilMoistureData:
+        x_train_dict, x_test_dict = readInFile('../Data/Region_MOIT_updated.json', 'MOIT', x_train_dict, x_test_dict) #Read in soil moisture
 
     return x_train_dict, x_test_dict
 
