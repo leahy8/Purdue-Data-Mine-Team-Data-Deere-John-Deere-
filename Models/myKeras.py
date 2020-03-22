@@ -10,13 +10,14 @@ import keras
 import numpy as np
 import json
 import csv
+import matplotlib.pyplot as plt
 
 states = ["Iowa", "Michigan", "Minnesota", "Wisconsin"]
 datasets = ['PRCP', 'TAVG', 'TMAX', 'TMIN'] #['AWND', 'EVAP', 'PRCP', 'TAVG', 'TMAX', 'TMIN']
 trainYearsMin, trainYearsMax = 2002, 2010
 testYearsMin, testYearsMax = 2011, 2012
 
-addInSoilMoistureData = False
+addInSoilMoistureData = True
 
 trainYears = list(range(trainYearsMin,trainYearsMax + 1))
 testYears = list(range(testYearsMin,testYearsMax + 1))
@@ -165,7 +166,7 @@ model.compile(optimizer='RMSprop', #RMSprop
               loss='mean_squared_error', #mean_absolute_error
               metrics=['mean_absolute_percentage_error']) #https://stackoverflow.com/questions/45632549/why-is-the-accuracy-for-my-keras-model-always-0-when-training
 
-model.fit(x_train, y_train, epochs=10)
+history = model.fit(x_train, y_train, epochs=10, validation_split=0.2)
 
 #Verify
 val_loss, val_acc = model.evaluate(x_test, y_test)
@@ -179,6 +180,32 @@ print(f"Number of data points for testing:\t{x_test.shape[0]}")
 
 #Save
 model.save('currentModel.model')
+
+#Output Plots
+acc = history.history['mean_absolute_percentage_error']
+val_acc = history.history['val_mean_absolute_percentage_error']
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+
+epochs = range(1, len(acc) + 1)
+
+plt.plot(epochs, acc, 'bo', label='Training percent error')
+plt.plot(epochs, val_acc, 'b', label='Testing percent error')
+plt.xlabel('Epochs')
+plt.ylabel('Mean Absolute Percentage Error')
+plt.title('Accuracy of Model')
+plt.legend()
+
+plt.figure()
+
+plt.plot(epochs, loss, 'bo', label='Training loss')
+plt.plot(epochs, val_loss, 'b', label='Testing loss')
+plt.xlabel('Epochs')
+plt.ylabel('Loss')
+plt.title('Training and Testing Loss')
+plt.legend()
+
+plt.show()
 
 
 #Predictions

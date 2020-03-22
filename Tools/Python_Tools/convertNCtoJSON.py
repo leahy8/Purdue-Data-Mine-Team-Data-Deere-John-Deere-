@@ -28,10 +28,10 @@ startLatIndex, endLatIndex = 0, 0
 startLonIndex, endLonIndex = 0, 0
 
 # Lat and Long Specifications (specify region)
-lat_min = 40 #degrees north
-lat_max = 50
-lon_min = 360 - 97 #degrees west inputted on right (convert to degree east)
-lon_max = 360 - 82
+lat_min = 35 #degrees north #40
+lat_max = 50 #50
+lon_min = 360 - 100 #degrees west inputted on right (convert to degree east) #97
+lon_max = 360 - 80
 
 rootgrp = Dataset("soilw.mon.mean.v2.nc", "r", format="NETCDF4_CLASSIC")
 

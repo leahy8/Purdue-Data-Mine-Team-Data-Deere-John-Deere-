@@ -9,7 +9,9 @@ datasets = ['PRCP', 'TAVG', 'TMAX', 'TMIN']
 trainYearsMin, trainYearsMax = 0, 0
 testYearsMin, testYearsMax = 2002, 2012
 
-model = keras.models.load_model('regionPredictor1881.model')
+model = keras.models.load_model('currentModel.model')
+
+addInSoilMoistureData = False
 ################################################################################################################
 ################################################################################################################
 #Functions
@@ -18,29 +20,42 @@ def createDefaultEntry():
     for name in datasets: #Each dataset
         for month in range(1,13): #For each month
             temp[f'{name}.{month}'] = 0 #Default values to 0 in case never filled out
+
+    if addInSoilMoistureData:
+         for month in range(1,13):
+            temp[f'MOIT.{month}'] = 0
+
     return temp
+
+def readInFile(fileName, datasetName, x_train_dict, x_test_dict):
+    with open(fileName, 'r') as f: #Read in as dictionary
+        mydict = json.load(f)   
+        for entry in mydict.values(): #Convert to list and split based on year
+            entryYear = int(entry['date'][0:4])
+            entryMonth = int(entry['date'][5:7])
+            entryCounty = str.upper(entry['county'][:-7]) #Format for later to match county
+            entryState = str.upper(entry['state'])
+            keyName = f"{entryState}.{entryCounty}.{entryYear}" #Format for unique keys based on county and year
+
+            if entryYear >= trainYearsMin and entryYear <= trainYearsMax:
+                if not keyName in x_train_dict:
+                    x_train_dict[keyName] = createDefaultEntry()
+
+                x_train_dict[keyName][f'{datasetName}.{entryMonth}'] = entry['value']
+            elif entryYear >= testYearsMin and entryYear <= testYearsMax:
+                if not keyName in x_test_dict:
+                    x_test_dict[keyName] = createDefaultEntry()
+
+                x_test_dict[keyName][f'{datasetName}.{entryMonth}'] = entry['value']
+    return x_train_dict, x_test_dict
 
 def loadDatasets():    
     x_train_dict, x_test_dict = {}, {}
     for datasetName in datasets:
-        with open(f'../Data/{state}_GSOM_{datasetName}.json', 'r') as f: #Read in as dictionary
-            mydict = json.load(f)   
-            for entry in mydict.values(): #Convert to list and split based on year
-                entryYear = int(entry['date'][0:4])
-                entryMonth = int(entry['date'][5:7])
-                entryCounty = str.upper(entry['county'][:-7]) #Format for later to match county
-                keyName = f"{entryCounty}.{entryYear}" #Format for unique keys based on county and year
+        x_train_dict, x_test_dict = readInFile(f'../Data/{state}_GSOM_{datasetName}.json', datasetName, x_train_dict, x_test_dict)
 
-                if entryYear >= trainYearsMin and entryYear <= trainYearsMax:
-                    if not keyName in x_train_dict:
-                        x_train_dict[keyName] = createDefaultEntry()
-
-                    x_train_dict[keyName][f'{datasetName}.{entryMonth}'] = entry['value']
-                elif entryYear >= testYearsMin and entryYear <= testYearsMax:
-                    if not keyName in x_test_dict:
-                        x_test_dict[keyName] = createDefaultEntry()
-
-                    x_test_dict[keyName][f'{datasetName}.{entryMonth}'] = entry['value']
+    if addInSoilMoistureData:
+        x_train_dict, x_test_dict = readInFile('../Data/Region_MOIT_updated.json', 'MOIT', x_train_dict, x_test_dict) #Read in soil moisture
 
     return x_train_dict, x_test_dict
 
@@ -50,7 +65,9 @@ def loadYield():
     for line in reader:
         entryYear = int(line['Year'])
         entryCounty = line['County']
-        keyName = f"{entryCounty}.{entryYear}" #Format for unique keys based on county and year
+        entryState = line['State']
+        keyName = f"{entryState}.{entryCounty}.{entryYear}" #Format for unique keys based on county and year
+
         if entryYear >= trainYearsMin and entryYear <= trainYearsMax:
             if not keyName in y_train_dict:
                 y_train_dict[keyName] = 0
