@@ -2,6 +2,13 @@
 
 **Goal:** Assess the Impact of Biophysical Parameters on Corn Yield Potential in the Upper Midwest United States
 
+###Repository Structure
+
+* **Data** - Data for each parameter and crop yield in JSON format
+* **Media** - Correlation plots between yield and each parameter, and plots of each parameter over time
+* **Models** - Prediction model for yield using Keras and Tensorflow
+* **Tools** - Python and R files to retrieve, wrangle, and visualize data
+
 ### Project Contributors
 * Ryan Leahy - Project Manager
 * Ben Schwartz - Data Architect
