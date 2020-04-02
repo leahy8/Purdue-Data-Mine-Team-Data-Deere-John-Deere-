@@ -3,12 +3,12 @@ library(plyr) # mropa's answer   https://stackoverflow.com/questions/4227223/con
 library(ggplot2)
 library(RColorBrewer) #colors
 
-parameterFile = "~/JohnDeere/John-Deere-Project/Data/Wisconsin_GSOM_AWND.json"
-parameterFile2 = "~/JohnDeere/John-Deere-Project/Data/Iowa_GSOM_AWND.json"
-parameterFile3 = "~/JohnDeere/John-Deere-Project/Data/Michigan_GSOM_AWND.json"
-parameterFile4 = "~/JohnDeere/John-Deere-Project/Data/Minnesota_GSOM_AWND.json"
-plotTitle = 'Yield vs. AWND'
-xlabel = "Average Monthly Wind Speed (m/s)"
+parameterFile = "~/JohnDeere/John-Deere-Project/Data/Wisconsin_GSOM_PRCP.json"
+parameterFile2 = "~/JohnDeere/John-Deere-Project/Data/Iowa_GSOM_PRCP.json"
+parameterFile3 = "~/JohnDeere/John-Deere-Project/Data/Michigan_GSOM_PRCP.json"
+parameterFile4 = "~/JohnDeere/John-Deere-Project/Data/Minnesota_GSOM_PRCP.json"
+plotTitle = 'Yield vs. PRCP'
+xlabel = "Total Monthly Precipitation (mm)"
 ylabel = "Yield (bushels per acre)"
 minMonth = 4 #April (inclusive)
 maxMonth = 10 #October (inclusive)
@@ -125,7 +125,8 @@ ggplot(NULL, aes(x=Parameter, y=Yield, group=state)) +
   geom_point(data = myDF4F, aes(colour = "Iowa")) + 
   
   ggtitle(newTitle)+
-  labs(x=xlabel, y=ylabel, color="Legend")
+  labs(x=xlabel, y=ylabel, color="Legend")+
+  theme(legend.position = "none")
  
 
 

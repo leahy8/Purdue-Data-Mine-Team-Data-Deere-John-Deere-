@@ -6,7 +6,7 @@ library(RColorBrewer) #colors
 parameterFile = "~/JohnDeere/John-Deere-Project/Data/Region_MOIT_updated.json"
 
 plotTitle = 'Yield vs. MOIT'
-xlabel = "Soil Moisture (mm depth / m soil)"
+xlabel = "Total Monthly Soil Moisture (mm depth / m soil)"
 ylabel = "Yield (bushels per acre)"
 minMonth = 4 #April (inclusive)
 maxMonth = 10 #October (inclusive)
@@ -126,6 +126,7 @@ ggplot(NULL, aes(x=Parameter, y=Yield, group=state)) +
   
   geom_point(data = myDF4F, aes(colour = "Iowa")) + 
   
-  ggtitle(newTitle)+
-  labs(x=xlabel, y=ylabel, color="Legend")
+  ggtitle(newTitle) +
+  labs(x=xlabel, y=ylabel, color="Legend")+
+  theme(legend.position = "none")
 
