@@ -23,8 +23,7 @@
 * David Glass
 * Gaylia Ostermeier
 
-### OneDrive Folder 
-(Will need password from Data Mine Staff to Access)
+### OneDrive Folder (Will need password from Data Mine Staff to Access)
 https://purdue0-my.sharepoint.com/:f:/g/personal/leahy8_purdue_edu/Eo182zqPlstGvOVHMGQerOoBI0cNKm1Hse9V8oUMwkkxhw?e=Ex242N
 
 ![Image of Poster](https://github.com/leahy8/John-Deere-Project/blob/master/Media/John_Deere_Poster.png)
